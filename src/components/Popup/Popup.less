@@ -13,19 +13,32 @@
   &__container {
     position: relative;
     margin: 0 auto;
-    padding: 30px 50px;
+    padding: 25px;
     width: 50%;
     background-color: @popup-bg-color;
     border-radius: @radius;
+    box-shadow: 5px 5px 15px 0px rgba(34, 60, 80, 0.2);
   }
 
   &__close-btn {
     position: absolute;
-    top: -15px;
-    right: -15px;
+    top: -20px;
+    right: -25px;
     background-color: transparent;
     border: none;
-    color: red;
     cursor: pointer;
+
+    &svg path {
+      fill: @black;
+      width: 40px;
+      height: 40px;
+      transition: all .6s;
+    }
+
+    &:hover {
+      & svg path {
+        fill: @red;
+      }
+    }
   }
 }

@@ -1,11 +1,36 @@
-import Popup from '../Popup/Popup';
-import AddForm from "../AddForm/AddForm";
+import { useState } from 'react';
+
+import AddTaskPopup from '../AddTaskPopup/AddTaskPopup';
+import FullTaskPopup from '../FullTaskPopup/FullTaskPopup';
+import Task from '../Task/Task';
+
+import tasks from '../../taskdb'; 
 
 function App() {
+  const defaultFullTask = {title: '', text: ''};
+
+  const [ isAddTaskPopupOpen, setIsAddTaskPopupOpen ] = useState(false);
+  const [ isFullTaskPopupOpen, setIsFullTaskPopupOpen ] = useState(false);
+  const [fullTask, setFullTask] = useState(defaultFullTask);
+
+  const handleOpenAddTask = () => {
+    setIsAddTaskPopupOpen(true);
+  }
+
+  const closeAllPopups = () => {
+    setIsAddTaskPopupOpen(false);
+    setIsFullTaskPopupOpen(false);
+  }
+
+  const handleClickTask = (data) => {
+    setIsFullTaskPopupOpen(true);
+    setFullTask(data);
+  }
+
   return (
     <div className="app">
       <h1 className="app__title">ToDo List</h1>
-      <button className="app__new-task">
+      <button className="app__new-task" onClick={handleOpenAddTask}>
         Новая задача
         <svg className="app__new-task-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <g id="Layer_1" data-name="Layer 1">
@@ -16,96 +41,17 @@ function App() {
           </g>
         </svg>
       </button>
-      {/* <AddForm /> */}
-      {/* <Popup>
-        <AddForm />
-      </Popup> */}
       <div className="task__container">
         <ul className="task__list">
-          <li className="task__item task__item_done">
-            <h2 className="task__title">Какое-то имя задачи</h2>
-            <p className="task__text">Не следует, однако, забывать, что существующая теория играет важную роль в формировании поставленных обществом задач. В своём стремлении улучшить пользовательский опыт мы упускаем, что базовые сценарии поведения пользователей подвергнуты целой серии независимых исследований. Безусловно, внедрение современных методик требует от нас анализа экономической целесообразности принимаемых решений. Ясность нашей позиции очевидна: консультация с широким активом является качественно новой ступенью распределения внутренних резервов и ресурсов.</p>
-            <div className="task__btns">
-            <button className=" task__btn task__delete-btn">
-              <svg
-                fill="#000000"
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 30 30" width="100px"
-                height="100px"
-              >
-                <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z"/>
-              </svg>
-            </button>
-            <button className="task__btn task__done-btn">
-            <svg
-              fill="#000000"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 50 50"
-              width="100px"
-              height="100px"
-            >
-              <path d="M 25 2 C 12.317 2 2 12.317 2 25 C 2 37.683 12.317 48 25 48 C 37.683 48 48 37.683 48 25 C 48 20.44 46.660281 16.189328 44.363281 12.611328 L 42.994141 14.228516 C 44.889141 17.382516 46 21.06 46 25 C 46 36.579 36.579 46 25 46 C 13.421 46 4 36.579 4 25 C 4 13.421 13.421 4 25 4 C 30.443 4 35.393906 6.0997656 39.128906 9.5097656 L 40.4375 7.9648438 C 36.3525 4.2598437 30.935 2 25 2 z M 43.236328 7.7539062 L 23.914062 30.554688 L 15.78125 22.96875 L 14.417969 24.431641 L 24.083984 33.447266 L 44.763672 9.046875 L 43.236328 7.7539062 z"/>
-            </svg>
-            </button>
-            </div>
-          </li>
-          <li className="task__item">
-            <h2 className="task__title">Какое-то имя задачи</h2>
-            <span className="task__text">Не следует, однако, забывать, что существующая теория играет важную роль в формировании поставленных обществом задач. В своём стремлении улучшить пользовательский опыт мы упускаем, что базовые сценарии поведения пользователей подвергнуты целой серии независимых исследований. Безусловно, внедрение современных методик требует от нас анализа экономической целесообразности принимаемых решений. Ясность нашей позиции очевидна: консультация с широким активом является качественно новой ступенью распределения внутренних резервов и ресурсов.Не следует, однако, забывать, что существующая теория играет важную роль в формировании поставленных обществом задач. В своём стремлении улучшить пользовательский опыт мы упускаем, что базовые сценарии поведения пользователей подвергнуты целой серии независимых исследований. Безусловно, внедрение современных методик требует от нас анализа экономической целесообразности принимаемых решений. Ясность нашей позиции очевидна: консультация с широким активом является качественно новой ступенью распределения внутренних резервов и ресурсов.</span>
-            <div className="task__btns">
-            <button className=" task__btn task__delete-btn">
-              <svg
-                fill="#000000"
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 30 30" width="100px"
-                height="100px"
-              >
-                <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z"/>
-              </svg>
-            </button>
-            <button className="task__btn task__done-btn">
-            <svg
-              fill="#000000"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 50 50"
-              width="100px"
-              height="100px"
-            >
-              <path d="M 25 2 C 12.317 2 2 12.317 2 25 C 2 37.683 12.317 48 25 48 C 37.683 48 48 37.683 48 25 C 48 20.44 46.660281 16.189328 44.363281 12.611328 L 42.994141 14.228516 C 44.889141 17.382516 46 21.06 46 25 C 46 36.579 36.579 46 25 46 C 13.421 46 4 36.579 4 25 C 4 13.421 13.421 4 25 4 C 30.443 4 35.393906 6.0997656 39.128906 9.5097656 L 40.4375 7.9648438 C 36.3525 4.2598437 30.935 2 25 2 z M 43.236328 7.7539062 L 23.914062 30.554688 L 15.78125 22.96875 L 14.417969 24.431641 L 24.083984 33.447266 L 44.763672 9.046875 L 43.236328 7.7539062 z"/>
-            </svg>
-            </button>
-            </div>
-          </li>
-          <li className="task__item">
-            <h2 className="task__title">Какое-то имя задачи</h2>
-            <span className="task__text">Не следует, однако, забывать, что существующая теория играет важную роль в формировании поставленных обществом задач. В своём стремлении улучшить пользовательский опыт мы упускаем, что базовые сценарии поведения пользователей подвергнуты целой серии независимых исследований. Безусловно, внедрение современных методик требует от нас анализа экономической целесообразности принимаемых решений. Ясность нашей позиции очевидна: консультация с широким активом является качественно новой ступенью распределения внутренних резервов и ресурсов.</span>
-            <div className="task__btns">
-            <button className=" task__btn task__delete-btn">
-              <svg
-                fill="#000000"
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 30 30" width="100px"
-                height="100px"
-              >
-                <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z"/>
-              </svg>
-            </button>
-            <button className="task__btn task__done-btn">
-            <svg
-              fill="#000000"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 50 50"
-              width="100px"
-              height="100px"
-            >
-              <path d="M 25 2 C 12.317 2 2 12.317 2 25 C 2 37.683 12.317 48 25 48 C 37.683 48 48 37.683 48 25 C 48 20.44 46.660281 16.189328 44.363281 12.611328 L 42.994141 14.228516 C 44.889141 17.382516 46 21.06 46 25 C 46 36.579 36.579 46 25 46 C 13.421 46 4 36.579 4 25 C 4 13.421 13.421 4 25 4 C 30.443 4 35.393906 6.0997656 39.128906 9.5097656 L 40.4375 7.9648438 C 36.3525 4.2598437 30.935 2 25 2 z M 43.236328 7.7539062 L 23.914062 30.554688 L 15.78125 22.96875 L 14.417969 24.431641 L 24.083984 33.447266 L 44.763672 9.046875 L 43.236328 7.7539062 z"/>
-            </svg>
-            </button>
-            </div>
-          </li>
+          {
+            tasks.map((item, i) => {
+              return <Task key={i} title={item.title} text={item.text} onClickTask={(data) => handleClickTask(data)} />
+            })
+          }
         </ul>
-
       </div>
+      <AddTaskPopup isOpen={isAddTaskPopupOpen} onClose={closeAllPopups}/>
+      <FullTaskPopup isOpen={isFullTaskPopupOpen} onClose={closeAllPopups} {...fullTask}/>
     </div>
   );
 }

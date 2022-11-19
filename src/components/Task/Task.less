@@ -16,18 +16,22 @@
       box-shadow: 4px 4px 8px 0px @dark-green;
     }
 
+    &_expired {
+      border: 1px solid @red;
+
+      & .task__date {
+        color: @red;
+      }
+    }
+
     &_done {
       text-decoration: line-through;
+      border: none;
 
       & .task__done-btn {
         background-color: rgb(27, 178, 27);
       }
     }
-  }
-
-  &__title {
-    margin: 0;
-    margin-bottom: 15px;
   }
 
   &__btns {
@@ -71,16 +75,26 @@
 
   &__text {
     margin: 0;
-    margin-bottom: 5px;
+    margin-top: 30px;
+    margin-bottom: 15px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    -webkit-line-clamp: 8;
+    -webkit-line-clamp: 3;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  &__date {
+    display: block;
+    margin: 0;
   }
 
   &__more {
-    margin-top: 5px;
-    margin-left: auto;
     text-decoration: none;
     color: inherit;
     transition: all .6s;

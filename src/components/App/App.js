@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import db from '../../utils/firebase';
-import { ref, push, get, remove } from "firebase/database";
+import { ref, push, get, remove, update } from "firebase/database";
 
 import TaskForm from '../TaskForm/TaskForm';
 import Task from '../Task/Task';
@@ -38,7 +38,7 @@ function App() {
       .then(() => {
         // Мб всплывающее уведомление о добавлении
         // TODO: Ниже повторяющийся код. Применить принцип DRY
-        
+
         get(ref(db, 'tasks'))
           .then(snapshot => {
             const arr = [];
@@ -59,6 +59,7 @@ function App() {
       });
   }
 
+  // Удаляем таску
   const onDeleteTask = (id) => {
     remove(ref(db, 'tasks/' + id))
       .then(() => {
@@ -74,7 +75,26 @@ function App() {
 
             setForRender(arr.reverse());
           });
-      console.log('delete');
+        console.log('delete');
+      });
+  }
+
+  const onDoneTask = (id, data) => {
+     update(ref(db, 'tasks/' + id), data)
+      .then(() => {
+        get(ref(db, 'tasks'))
+          .then(snapshot => {
+            const arr = [];
+            snapshot.forEach(childSnapshot => {
+              const key = childSnapshot.key;
+              const data = childSnapshot.val();
+
+              arr.push({ id: key, ...data });
+            });
+
+            setForRender(arr.reverse());
+          });
+        console.log('task is done');
       });
   }
 
@@ -92,6 +112,7 @@ function App() {
                   key={item.id}
                   {...item}
                   onDeleteTask={onDeleteTask}
+                  onDoneTask={onDoneTask}
                 />
               );
             })

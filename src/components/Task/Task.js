@@ -1,19 +1,21 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState } from 'react'
 
-const Task = ({ id, text, date, onDeleteTask }) => {
+const Task = ({ id, text, date, complited, onDeleteTask, onDoneTask }) => {
 
-  const [isTaskDone, setIsTaskDone] = useState(false);
+  const [isTaskDone, setIsTaskDone] = useState(complited);
 
   let classNames = `task__item ${isTaskDone ? 'task__item_done' : ''}`;
   const nowDate = new Date();
 
-  if(nowDate > new Date(date) && !isTaskDone) {
+  if (nowDate > new Date(date) && !isTaskDone) {
     classNames += 'task__item_expired'
   }
 
   const handleClickDone = () => {
-    setIsTaskDone(state => !state);
+    if (!isTaskDone) {
+      setIsTaskDone(true);
+      onDoneTask(id, { complited: true });
+    }
   }
 
   const handleDeleteTask = () => {
@@ -58,14 +60,7 @@ const Task = ({ id, text, date, onDeleteTask }) => {
         </button>
       </div>
       <div className="task__footer">
-        <p className="task__date">{date}</p>
-        <div 
-          href="#"
-          className="task__more"
-        >
-          Подробнее
-          <span>&#10230;</span>
-        </div>
+        <p className="task__date">Плановая дата: {date}</p>
       </div>
     </li>
   )

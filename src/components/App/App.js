@@ -1,42 +1,59 @@
 import { useEffect, useState } from 'react';
 import db from '../../utils/firebase';
-import { ref, push, onValue } from "firebase/database";
+import { push, get, child } from "firebase/database";
 
 import TaskForm from '../TaskForm/TaskForm';
 import Task from '../Task/Task';
-
-import tasks from '../../taskdb';
 
 function App() {
 
   const [forRender, setForRender] = useState([]);
 
   // Рендер задач из БД
-  useEffect(() => {
-    const tasks = ref(db, 'tasks');
-    onValue(tasks, (snapshot) => {
-      const s = snapshot.val();
-      console.log(s);
-    })
-  }, [])
 
-  console.log(forRender);
-  
+  useEffect(() => {
+    // TODO: Ниже повторяющийся код. Применить принцип DRY
+    const arr = [];
+
+    get(child(db, 'tasks'))
+      .then(snapshot => {
+        snapshot.forEach(childSnapshot => {
+          const key = childSnapshot.key;
+          const data = childSnapshot.val();
+
+          arr.push({ id: key, ...data });
+        });
+
+        setForRender(arr.reverse());
+      });
+  }, []);
 
   // Добавляем запись в БД
-  const onAddTask = async (data) => {
+  const onAddTask = (data) => {
 
     if (!data) return Promise.reject('Nothing get');
-    push(ref(db, 'tasks'), { complited: false, ...data })
+    push(child(db, 'tasks'), { complited: false, ...data })
       .then(() => {
         // Мб всплывающее уведомление о добавлении
+        // TODO: Ниже повторяющийся код. Применить принцип DRY
+        const arr = [];
+        get(child(db, 'tasks'))
+          .then(snapshot => {
+            snapshot.forEach(childSnapshot => {
+              const key = childSnapshot.key;
+              const data = childSnapshot.val();
+
+              arr.push({ id: key, ...data });
+            });
+
+            setForRender(arr.reverse());
+          });
         console.log('send')
       })
       .catch((err) => {
         // Уведомление о фейле
         console.dir(err)
       });
-
   }
 
   return (

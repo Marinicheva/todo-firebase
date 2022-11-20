@@ -1,10 +1,10 @@
 import { initializeApp } from 'firebase/app';
-import { getDatabase  } from 'firebase/database';
+import { getDatabase, ref  } from 'firebase/database';
 
 import { firebaseConfig } from './constants';
 
 /* Подключаемся к firebase*/
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+const db = ref(getDatabase(app));
 
 export default db;

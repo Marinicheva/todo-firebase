@@ -1,8 +1,11 @@
-import { useState } from 'react'
+import { useState } from 'react';
+
+import EditTask from '../EditTask/EditTask';
 
 const Task = ({ id, text, date, complited, onDeleteTask, onDoneTask }) => {
 
   const [isTaskDone, setIsTaskDone] = useState(complited);
+  const [isTaskEdit, setIsTaskEdit] = useState(false);
 
   let classNames = `task__item ${isTaskDone ? 'task__item_done' : ''}`;
   const nowDate = new Date();
@@ -22,11 +25,21 @@ const Task = ({ id, text, date, complited, onDeleteTask, onDoneTask }) => {
     onDeleteTask(id);
   }
 
+  const onEditTask = () => {
+    setIsTaskEdit(true);
+  }
+
+  if( isTaskEdit ) {
+    return (
+      <EditTask text={text} date={date} />
+    );
+  }
+
   return (
     <li className={classNames}>
       <p className="task__text">{text}</p>
       <div className="task__btns">
-        <button className="task__btn task__btn-edit">
+        <button className="task__btn task__btn-edit" onClick={onEditTask} disabled={isTaskDone}>
           <svg
             fill="#000000"
             xmlns="http://www.w3.org/2000/svg"

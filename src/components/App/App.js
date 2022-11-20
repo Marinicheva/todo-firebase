@@ -101,8 +101,10 @@ function App() {
   return (
     <div className="app">
       <h1 className="app__title">ToDo List</h1>
-      <TaskForm onAddTask={onAddTask} />
-
+      <div className='add-task'>
+        <TaskForm onAddTask={onAddTask} />
+      </div>
+      
       <div className="task__container">
         <ul className="task__list">
           {

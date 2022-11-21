@@ -1,8 +1,18 @@
-const FullTaskPopup = ({ title, text, onClose, isOpen }) => {
+import { useRef } from "react";
+
+const FullTaskPopup = ({ title, text, date, onClose, isOpen }) => {
   const classNames = `popup ${isOpen ? 'popup_opened' : ''}`;
+  const overlay = useRef();
+
+  const handleCloseClickByOverlay = (evt) => {
+    console.log()
+    if(evt.target === overlay.current) {
+      onClose();
+    }
+  }
 
   return (
-    <div className={classNames}>
+    <div ref={overlay} className={classNames} onClick={(evt) => handleCloseClickByOverlay(evt)}>
       <div className="popup__container">
       <button className="popup__close-btn" onClick={onClose}>
           <svg
@@ -20,8 +30,11 @@ const FullTaskPopup = ({ title, text, onClose, isOpen }) => {
             />
           </svg>
         </button>
-        <h2 className="full-task__title">{title}</h2>
-        <p className="full-task__text">{text}</p>
+        <h2 className="popup__title">{title}</h2>
+        <p className="popup__text">{text}</p>
+        <div className="popup__footer">
+          <p className="popup__date">Плановая дата: {date}</p>
+        </div>
       </div>
     </div>
   )

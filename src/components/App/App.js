@@ -4,9 +4,12 @@ import { ref, push, get, remove, update } from "firebase/database";
 
 import TaskForm from '../TaskForm/TaskForm';
 import Task from '../Task/Task';
+import FullTaskPopup from '../FullTaskPopup/FullTaskPopup';
 
 function App() {
-
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [openedTask, setIsOpenedTask] = useState(null);
+  // TODO: Изменить названия этих стейтов ниже
   const [forRender, setForRender] = useState([]);
 
   // Рендер задач из БД
@@ -77,6 +80,7 @@ function App() {
       });
   }
 
+  // Отметить таску выполненной
   const onDoneTask = (id, data) => {
      update(ref(db, 'tasks/' + id), data)
       .then(() => {
@@ -96,6 +100,7 @@ function App() {
       });
   }
 
+  // Редактирование таски
   const onUpdateTask = (id, data) => {
     update(ref(db, 'tasks/' + id), data)
       .then(() => {
@@ -115,6 +120,17 @@ function App() {
       });
   }
 
+  const onOpenTaskPopup = (id) => {
+    const openedTask = forRender.find(item => item.id === id);
+    setIsOpenedTask(openedTask)
+    setIsPopupOpen(true);
+  }
+
+  const onCloseTaskPopup = () => {
+    setIsPopupOpen(false);
+    setIsOpenedTask(null)
+  }
+
   return (
     <div className="app">
       <h1 className="app__title">ToDo List</h1>
@@ -130,6 +146,7 @@ function App() {
                 <Task
                   key={item.id}
                   {...item}
+                  onOpenTask={onOpenTaskPopup}
                   onDeleteTask={onDeleteTask}
                   onDoneTask={onDoneTask}
                   onUpdateTask={onUpdateTask}
@@ -139,6 +156,7 @@ function App() {
           }
         </ul>
       </div>
+      <FullTaskPopup {...openedTask} isOpen={isPopupOpen} onClose={onCloseTaskPopup} />
     </div>
   );
 }

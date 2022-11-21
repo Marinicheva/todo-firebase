@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import EditTask from '../EditTask/EditTask';
 
-const Task = ({ id, title, text, date, complited, onDeleteTask, onDoneTask, onUpdateTask }) => {
+const Task = ({ id, title, text, date, complited, onDeleteTask, onDoneTask, onUpdateTask, onOpenTask }) => {
 
   const [isTaskDone, setIsTaskDone] = useState(complited);
   const [isTaskEdit, setIsTaskEdit] = useState(false);
@@ -33,8 +33,12 @@ const Task = ({ id, title, text, date, complited, onDeleteTask, onDoneTask, onUp
     setIsTaskEdit(false);
   }
 
+  const handleOpenTask = () => {
+    onOpenTask(id)
+  }
 
-  if( isTaskEdit ) {
+
+  if (isTaskEdit) {
     return (
       <EditTask
         id={id}
@@ -87,7 +91,7 @@ const Task = ({ id, title, text, date, complited, onDeleteTask, onDoneTask, onUp
       </div>
       <div className="task__footer">
         <p className="task__date">Плановая дата: {date}</p>
-        <button className="task__more">Подробнее <span>&#10230;</span></button>
+        <button className="task__more" onClick={handleOpenTask}>Подробнее <span>&#10230;</span></button>
       </div>
     </li>
   )

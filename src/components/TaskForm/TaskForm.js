@@ -47,12 +47,11 @@ const TaskForm = ({ onAddTask }) => {
 
       <label className='form__label'>
         Описание задачи:
-        <input
-          className='form__field'
+        <textarea
+          className='form__field form__text'
           value={taskText}
           id="text"
           placeholder="Введите задачу..."
-          type="text"
           onChange={(evt) => handleChangeTaskText(evt)}
         />
       </label>

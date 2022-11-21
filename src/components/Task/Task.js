@@ -29,9 +29,14 @@ const Task = ({ id, text, date, complited, onDeleteTask, onDoneTask }) => {
     setIsTaskEdit(true);
   }
 
+  const onCancelEditTask = () => {
+    setIsTaskEdit(false);
+  }
+
+
   if( isTaskEdit ) {
     return (
-      <EditTask text={text} date={date} />
+      <EditTask text={text} date={date} onCancelEditTask={onCancelEditTask} />
     );
   }
 

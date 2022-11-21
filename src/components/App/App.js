@@ -10,7 +10,6 @@ function App() {
   const [forRender, setForRender] = useState([]);
 
   // Рендер задач из БД
-
   useEffect(() => {
     // TODO: Ниже повторяющийся код. Применить принцип DRY
     const arr = [];
@@ -31,8 +30,7 @@ function App() {
   // Добавляем запись в БД
   const onAddTask = (data) => {
 
-    if (!data) return Promise.reject('Nothing get');
-
+    if (!data || data.text === '') return Promise.reject('Nothing get');
 
     push(ref(db, 'tasks'), { complited: false, ...data })
       .then(() => {

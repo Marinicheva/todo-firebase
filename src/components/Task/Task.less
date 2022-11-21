@@ -2,7 +2,6 @@
   &__item {
     display: flex;
     flex-direction: column;
-    align-items: start;
     position: relative;
     padding: 15px;
     max-height: 240px;
@@ -54,6 +53,14 @@
     }
 
     &:hover {
+      & svg {
+        opacity: .5;
+      }
+    }
+
+    &-edit:disabled {
+      cursor: default;
+
       & svg {
         opacity: .5;
       }

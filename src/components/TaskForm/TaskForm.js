@@ -67,7 +67,7 @@ const TaskForm = ({ onAddTask }) => {
       </label>
 
       <button
-        className='form__submit-btn'
+        className='form__btn'
         type="submit"
       >
         Добавить

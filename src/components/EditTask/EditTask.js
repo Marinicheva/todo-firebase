@@ -1,15 +1,21 @@
 import {useEffect, useState} from 'react'
 
-const EditTask = ({text, date}) => {
+const EditTask = ({text, date, onCancelEditTask}) => {
   const [taskText, setTaskText] = useState('');
   const [taskDate, setTaskDate] =useState('');
-
-  console.log(taskText, taskDate);
 
   useEffect(() => {
     setTaskText(text);
     setTaskDate(date)
   }, [text, date]);
+
+  const handleChangeText = (evt) => {
+    setTaskText(evt.target.value);
+  }
+
+  const handleChangeDate = (evt) => {
+    setTaskDate(evt.target.value);
+  }
   
   return (
     <li className='task__item'>
@@ -20,6 +26,7 @@ const EditTask = ({text, date}) => {
           id="name"
           placeholder="Введите задачу..."
           type="text"
+          onChange={(evt) => {handleChangeText(evt)}}
         />
 
         <input
@@ -27,6 +34,7 @@ const EditTask = ({text, date}) => {
           value={taskDate}
           type="date"
           id="date"
+          onChange={(evt) => {handleChangeDate(evt)}}
         />
 
         <label className='form__label form__label-file' htmlFor="task-file">
@@ -52,13 +60,14 @@ const EditTask = ({text, date}) => {
         </label>
 
         <button
-          className='form__submit-btn'
+          className='form__btn'
           type="submit"
         >
           Сохранить
         </button>
         <button
-          className='form__cancel-btn'
+          className='form__btn'
+          onClick={onCancelEditTask}
         >
           Отменить
         </button>

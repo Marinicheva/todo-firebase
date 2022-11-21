@@ -1,13 +1,19 @@
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 
-const EditTask = ({ id, text, date, onFinishEditTask, onSubmitEditTaskForm }) => {
+const EditTask = ({ id, title, text, date, onFinishEditTask, onSubmitEditTaskForm }) => {
+  const [taskTitle, setTaskTitle] = useState('');
   const [taskText, setTaskText] = useState('');
-  const [taskDate, setTaskDate] =useState('');
+  const [taskDate, setTaskDate] = useState('');
 
   useEffect(() => {
+    setTaskTitle(title)
     setTaskText(text);
     setTaskDate(date)
-  }, [text, date]);
+  }, [title, text, date]);
+
+  const handleChangeTitle = (evt) => {
+    setTaskTitle(evt.target.value);
+  }
 
   const handleChangeText = (evt) => {
     setTaskText(evt.target.value);
@@ -19,23 +25,30 @@ const EditTask = ({ id, text, date, onFinishEditTask, onSubmitEditTaskForm }) =>
 
   const handleSubmitEditTask = (evt) => {
     evt.preventDefault();
-    const data = {text: taskText, date: taskDate};
-    console.log(data);
+    const data = { title: taskTitle, text: taskText, date: taskDate };
 
     onSubmitEditTaskForm(id, data);
     onFinishEditTask();
   }
-  
+
   return (
     <li className='task__item'>
       <form className="add-task-form form" onSubmit={(evt) => handleSubmitEditTask(evt)}>
         <input
           className='form__field'
-          value={taskText}
+          value={taskTitle}
           id="name"
           placeholder="Введите задачу..."
           type="text"
-          onChange={(evt) => {handleChangeText(evt)}}
+          onChange={(evt) => { handleChangeTitle(evt) }}
+        />
+
+        <textarea
+          className='form__field form__text'
+          value={taskText}
+          id="text"
+          placeholder="Введите задачу..."
+          onChange={(evt) => handleChangeText(evt)}
         />
 
         <input
@@ -43,7 +56,7 @@ const EditTask = ({ id, text, date, onFinishEditTask, onSubmitEditTaskForm }) =>
           value={taskDate}
           type="date"
           id="date"
-          onChange={(evt) => {handleChangeDate(evt)}}
+          onChange={(evt) => { handleChangeDate(evt) }}
         />
 
         <label className='form__label form__label-file' htmlFor="task-file">

@@ -36,7 +36,14 @@ const Task = ({ id, title, text, date, complited, onDeleteTask, onDoneTask, onUp
 
   if( isTaskEdit ) {
     return (
-      <EditTask id={id} text={text} date={date} onFinishEditTask={onFinishEditTask} onSubmitEditTaskForm={onUpdateTask}/>
+      <EditTask
+        id={id}
+        title={title}
+        text={text}
+        date={date}
+        onFinishEditTask={onFinishEditTask}
+        onSubmitEditTaskForm={onUpdateTask}
+      />
     );
   }
 

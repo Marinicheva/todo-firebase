@@ -33,6 +33,10 @@
     }
   }
 
+  &__title {
+    margin: 0;
+  }
+
   &__btns {
     position: absolute;
     top: 10px;
@@ -102,14 +106,17 @@
   }
 
   &__more {
-    text-decoration: none;
-    color: inherit;
+    background-color: transparent;
+    border: none;
     transition: all .6s;
+    cursor: pointer;
+    animation: none;
 
     &:hover {
       color: @dark-green;
       text-decoration: underline;
       opacity: .8;
+      animation: moveToRigth 2s ease-in-out infinite;
     }
   }
 }

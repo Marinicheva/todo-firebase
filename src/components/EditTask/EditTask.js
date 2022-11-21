@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 
-const EditTask = ({text, date, onCancelEditTask}) => {
+const EditTask = ({ id, text, date, onFinishEditTask, onSubmitEditTaskForm }) => {
   const [taskText, setTaskText] = useState('');
   const [taskDate, setTaskDate] =useState('');
 
@@ -16,10 +16,19 @@ const EditTask = ({text, date, onCancelEditTask}) => {
   const handleChangeDate = (evt) => {
     setTaskDate(evt.target.value);
   }
+
+  const handleSubmitEditTask = (evt) => {
+    evt.preventDefault();
+    const data = {text: taskText, date: taskDate};
+    console.log(data);
+
+    onSubmitEditTaskForm(id, data);
+    onFinishEditTask();
+  }
   
   return (
     <li className='task__item'>
-      <form className="add-task-form form">
+      <form className="add-task-form form" onSubmit={(evt) => handleSubmitEditTask(evt)}>
         <input
           className='form__field'
           value={taskText}
@@ -67,7 +76,7 @@ const EditTask = ({text, date, onCancelEditTask}) => {
         </button>
         <button
           className='form__btn'
-          onClick={onCancelEditTask}
+          onClick={onFinishEditTask}
         >
           Отменить
         </button>

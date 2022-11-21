@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import EditTask from '../EditTask/EditTask';
 
-const Task = ({ id, text, date, complited, onDeleteTask, onDoneTask }) => {
+const Task = ({ id, title, text, date, complited, onDeleteTask, onDoneTask, onUpdateTask }) => {
 
   const [isTaskDone, setIsTaskDone] = useState(complited);
   const [isTaskEdit, setIsTaskEdit] = useState(false);
@@ -29,19 +29,20 @@ const Task = ({ id, text, date, complited, onDeleteTask, onDoneTask }) => {
     setIsTaskEdit(true);
   }
 
-  const onCancelEditTask = () => {
+  const onFinishEditTask = () => {
     setIsTaskEdit(false);
   }
 
 
   if( isTaskEdit ) {
     return (
-      <EditTask text={text} date={date} onCancelEditTask={onCancelEditTask} />
+      <EditTask id={id} text={text} date={date} onFinishEditTask={onFinishEditTask} onSubmitEditTaskForm={onUpdateTask}/>
     );
   }
 
   return (
     <li className={classNames}>
+      <h2 className="task__title">{title}</h2>
       <p className="task__text">{text}</p>
       <div className="task__btns">
         <button className="task__btn task__btn-edit" onClick={onEditTask} disabled={isTaskDone}>
@@ -79,6 +80,7 @@ const Task = ({ id, text, date, complited, onDeleteTask, onDoneTask }) => {
       </div>
       <div className="task__footer">
         <p className="task__date">Плановая дата: {date}</p>
+        <button className="task__more">Подробнее <span>&#10230;</span></button>
       </div>
     </li>
   )

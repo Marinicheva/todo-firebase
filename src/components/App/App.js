@@ -96,11 +96,30 @@ function App() {
       });
   }
 
+  const onUpdateTask = (id, data) => {
+    update(ref(db, 'tasks/' + id), data)
+      .then(() => {
+        get(ref(db, 'tasks'))
+          .then(snapshot => {
+            const arr = [];
+            snapshot.forEach(childSnapshot => {
+              const key = childSnapshot.key;
+              const data = childSnapshot.val();
+
+              arr.push({ id: key, ...data });
+            });
+
+            setForRender(arr.reverse());
+          });
+        console.log('task is update');
+      });
+  }
+
   return (
     <div className="app">
       <h1 className="app__title">ToDo List</h1>
       <div className='add-task'>
-        <TaskForm onAddTask={onAddTask} />
+        <TaskForm onAddTask={onAddTask} onSubmitEditTaskForm={onUpdateTask} />
       </div>
       
       <div className="task__container">
@@ -113,6 +132,7 @@ function App() {
                   {...item}
                   onDeleteTask={onDeleteTask}
                   onDoneTask={onDoneTask}
+                  onUpdateTask={onUpdateTask}
                 />
               );
             })

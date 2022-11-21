@@ -5,14 +5,70 @@
 .form {
   display: flex;
   align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
   padding: 20px;
   background-color: @accent-light-green;
   border-radius: @radius;
 
+  &__label {
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+
+    &-date {
+      flex-direction: row;
+      align-items: center;
+      width: 40%;
+    }
+
+    &-file {
+      position: relative;
+      align-self: center;
+      padding: 5px 7px;
+      width: 40px;
+      background-color: @dark-green;
+      border-radius: @radius;
+      border: 2px solid @dark-green;
+      cursor: pointer;
+      transition: .6s;
+      box-sizing: border-box;
+  
+      & svg {
+        width: 20px;
+        height: 30px;
+        cursor: pointer;
+  
+        & path {
+          fill: @accent-light-green;
+        }
+      }
+  
+      &:hover {
+        background-color: @accent-light-green;
+  
+        & span {
+          color: @dark-green;
+        }
+  
+        & svg {
+          width: 20px;
+          height: 30px;
+          cursor: pointer;
+  
+          & path {
+            fill: @dark-green;
+          }
+        }
+      }
+    }
+
+  }
+
   &__field {
+    margin-top: 10px;
     padding: 5px 15px;
-    width: 60%;
     height: 40px;
     color: @black;
     border: 1px solid @accent-light-green;
@@ -32,48 +88,8 @@
 
   &__date {
     width: 110px;
-  }
-
-  &__label-file {
-    position: relative;
-    align-self: center;
-    margin-left: auto;
-    padding: 5px 7px;
-    width: 40px;
-    background-color: @dark-green;
-    border-radius: @radius;
-    border: 2px solid @dark-green;
-    cursor: pointer;
-    transition: .6s;
-    box-sizing: border-box;
-
-    & svg {
-      width: 20px;
-      height: 30px;
-      cursor: pointer;
-
-      & path {
-        fill: @accent-light-green;
-      }
-    }
-
-    &:hover {
-      background-color: @accent-light-green;
-
-      & span {
-        color: @dark-green;
-      }
-
-      & svg {
-        width: 20px;
-        height: 30px;
-        cursor: pointer;
-
-        & path {
-          fill: @dark-green;
-        }
-      }
-    }
+    margin: 0;
+    margin-left: 15px;
   }
 
   &__file {

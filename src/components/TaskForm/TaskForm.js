@@ -3,46 +3,72 @@ import { useState } from 'react'
 const TaskForm = ({ onAddTask }) => {
   const now = new Date();
   const date = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
-  const defaultState = { text: '', date: date };
+  const defaultState = { title: '', text: '', date: date };
 
+  const [taskTitle, setTaskTitle] = useState(defaultState.title);
   const [taskText, setTaskText] = useState(defaultState.text);
   const [taskDate, setTaskDate] = useState(defaultState.date);
 
+  const handleChangeTaskTitle = (evt) => {
+    setTaskTitle(evt.target.value);
+  }
+
   const handleChangeTaskText = (evt) => {
-    setTaskText(evt.target.value)
+    setTaskText(evt.target.value);
   }
 
   const handleChangeTaskDate = (evt) => {
-    setTaskDate(evt.target.value)
+    setTaskDate(evt.target.value);
   }
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
-    const newTask = { text: taskText, date: taskDate };
+    const newTask = { title: taskTitle, text: taskText, date: taskDate };
     onAddTask(newTask);
+    setTaskTitle(defaultState.title);
     setTaskText(defaultState.text);
     setTaskDate(defaultState.date);
   }
 
   return (
     <form className="add-task-form form" onSubmit={(evt) => handleSubmit(evt)}>
-      <input
-        className='form__field'
-        value={taskText}
-        id="name"
-        placeholder="Введите задачу..."
-        type="text"
-        onChange={(evt) => handleChangeTaskText(evt)}
-      />
+      <label className='form__label'>Заголовок задачи:
+        <input
+          className='form__field form__title'
+          value={taskTitle}
+          id="title"
+          placeholder="Введите заголовок для задачи..."
+          type="text"
+          onChange={(evt) => handleChangeTaskTitle(evt)}
+        />
+      </label>
 
-      <input
-        className='form__field form__date'
-        value={taskDate}
-        type="date"
-        id="date"
-        onChange={(evt) => handleChangeTaskDate(evt)}
-      />
+
+      <label className='form__label'>
+        Описание задачи:
+        <input
+          className='form__field'
+          value={taskText}
+          id="text"
+          placeholder="Введите задачу..."
+          type="text"
+          onChange={(evt) => handleChangeTaskText(evt)}
+        />
+      </label>
+
+
+      <label className='form__label form__label-date'>
+        Срок выполнения задачи:
+        <input
+          className='form__field form__date'
+          value={taskDate}
+          type="date"
+          id="date"
+          onChange={(evt) => handleChangeTaskDate(evt)}
+        />
+      </label>
+
 
       <label className='form__label form__label-file' htmlFor="task-file">
         <svg

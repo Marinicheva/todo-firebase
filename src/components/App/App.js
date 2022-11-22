@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import db from '../../utils/firebase';
-import { ref, push, get, remove, update } from "firebase/database";
+import { db, storage } from '../../utils/firebase';
+import { ref as dbRef, push, get, remove, update } from "firebase/database";
+import { ref as storageRef, listAll } from "firebase/storage";
 
 import TaskForm from '../TaskForm/TaskForm';
 import Task from '../Task/Task';
@@ -14,7 +15,7 @@ function App() {
   const getTasks = useCallback(() => {
     const arr = [];
 
-    get(ref(db, 'tasks'))
+    get(dbRef(db, 'tasks'))
       .then(snapshot => {
         snapshot.forEach(childSnapshot => {
           const key = childSnapshot.key;
@@ -27,6 +28,23 @@ function App() {
       });
   }, []);
 
+  // TODO: Пробую получить файл из firebase
+  // Files list
+  const fileRef = storageRef(storage, '/taks/id');
+
+  listAll(fileRef).then((res) => {
+    res.items.forEach((itemRef) => {
+      // console.log(itemRef);
+    });
+  });
+
+  // Download files to firebase
+
+
+
+
+
+
   // Рендер задач из БД
   useEffect(() => getTasks(), [getTasks]);
 
@@ -35,7 +53,7 @@ function App() {
 
     if (!data || data.text === '') return Promise.reject('Nothing get');
 
-    push(ref(db, 'tasks'), { complited: false, ...data })
+    push(dbRef(db, 'tasks'), { complited: false, ...data })
       .then(() => {
         // Мб всплывающее уведомление о добавлении
         getTasks();
@@ -49,7 +67,7 @@ function App() {
 
   // Удаляем таску
   const onDeleteTask = (id) => {
-    remove(ref(db, 'tasks/' + id))
+    remove(dbRef(db, 'tasks/' + id))
       .then(() => {
         getTasks();
         console.log('delete');
@@ -58,7 +76,7 @@ function App() {
 
   // Отметить таску выполненной
   const onDoneTask = (id, data) => {
-     update(ref(db, 'tasks/' + id), data)
+     update(dbRef(dbRef, 'tasks/' + id), data)
       .then(() => {
         getTasks();
         console.log('task is done');
@@ -67,7 +85,7 @@ function App() {
 
   // Редактирование таски
   const onUpdateTask = (id, data) => {
-    update(ref(db, 'tasks/' + id), data)
+    update(dbRef(dbRef, 'tasks/' + id), data)
       .then(() => {
         getTasks();
         console.log('task is update');

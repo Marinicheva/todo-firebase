@@ -9,7 +9,6 @@ import FullTaskPopup from '../FullTaskPopup/FullTaskPopup';
 function App() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [openedTask, setIsOpenedTask] = useState(null);
-  // TODO: Изменить названия этих стейтов ниже
   const [tasks, setTasks] = useState([]);
 
   const getTasks = useCallback(() => {

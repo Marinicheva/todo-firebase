@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { db, storage } from '../../utils/firebase';
 import { ref as dbRef, push, get, remove, update } from "firebase/database";
-import { ref as storageRef, listAll } from "firebase/storage";
+import { ref as storageRef, uploadBytes } from "firebase/storage";
 
 import TaskForm from '../TaskForm/TaskForm';
 import Task from '../Task/Task';
@@ -30,19 +30,25 @@ function App() {
 
   // TODO: Пробую получить файл из firebase
   // Files list
-  const fileRef = storageRef(storage, '/taks/id');
+  // const fileRef = storageRef(storage, '/taks/id');
 
-  listAll(fileRef).then((res) => {
-    res.items.forEach((itemRef) => {
-      // console.log(itemRef);
-    });
-  });
+  // listAll(fileRef).then((res) => {
+  //   res.items.forEach((itemRef) => {
+  //     // console.log(itemRef);
+  //   });
+  // });
 
   // Download files to firebase
+  const uploadFiles = (data, task) => {
 
+    for (let file of data.files) {
+      let fileRef = storageRef(storage, `/task/${task.key}/${file.name}`);
+      uploadBytes(fileRef, file).then((snapshot) => {
+        console.log('Uploaded a blob or file!', snapshot);
+      });
 
-
-
+    }
+  }
 
 
   // Рендер задач из БД
@@ -50,14 +56,19 @@ function App() {
 
   // Добавляем запись в БД
   const onAddTask = (data) => {
+    console.log(data);
 
     if (!data || data.text === '') return Promise.reject('Nothing get');
 
     push(dbRef(db, 'tasks'), { complited: false, ...data })
-      .then(() => {
+      .then((task) => {
         // Мб всплывающее уведомление о добавлении
-        getTasks();
+        uploadFiles(data, task)
+        console.log(task.key);
         console.log('send')
+      })
+      .then(() => {
+        getTasks();
       })
       .catch((err) => {
         // Уведомление о фейле

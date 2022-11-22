@@ -41,7 +41,7 @@ const TaskForm = ({ onAddTask }) => {
 
     console.log(fileInput.current.files);
   
-    const newTask = { title: taskTitle, text: taskText, date: taskDate };
+    const newTask = { title: taskTitle, text: taskText, date: taskDate, files: fileInput.current.files };
     onAddTask(newTask);
     handleResetForm();
   }

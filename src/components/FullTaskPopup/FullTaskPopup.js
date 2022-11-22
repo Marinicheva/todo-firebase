@@ -1,20 +1,41 @@
-import { useRef } from "react";
+import { useState, useRef } from "react";
 
-const FullTaskPopup = ({ title, text, date, onClose, isOpen }) => {
-  const classNames = `popup ${isOpen ? 'popup_opened' : ''}`;
+const FullTaskPopup = ({
+  id,
+  title,
+  text,
+  date,
+  isAddFiles,
+  files,
+  onClose,
+  isOpen,
+  onShowFiles
+}) => {
+  const popupClassNames = `popup ${isOpen ? 'popup_opened' : ''}`;
+  const [isShowFiles, setIsShowFiles] = useState(false);
+  
+  const filesContainerClassName =isShowFiles ? "popup__files-container_show" : "popup__files-container";
+
   const overlay = useRef();
 
   const handleCloseClickByOverlay = (evt) => {
     console.log()
-    if(evt.target === overlay.current) {
+    if (evt.target === overlay.current) {
       onClose();
     }
   }
 
+  const handleShowFiles = () => {
+    console.log('click');
+    onShowFiles(files, id);
+    setIsShowFiles(state => !state);
+
+  }
+
   return (
-    <div ref={overlay} className={classNames} onClick={(evt) => handleCloseClickByOverlay(evt)}>
+    <div ref={overlay} className={popupClassNames} onClick={(evt) => handleCloseClickByOverlay(evt)}>
       <div className="popup__container">
-      <button className="popup__close-btn" onClick={onClose}>
+        <button className="popup__close-btn" onClick={onClose}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 48 48"
@@ -34,6 +55,22 @@ const FullTaskPopup = ({ title, text, date, onClose, isOpen }) => {
         <p className="popup__text">{text}</p>
         <div className="popup__footer">
           <p className="popup__date">Плановая дата: {date}</p>
+
+          {isAddFiles &&
+            (
+              <div className="popup__files">
+                <button
+                  className="popup__show-files-btn"
+                  onClick={handleShowFiles}
+                >
+                  Файлы к текущей задаче
+                </button>
+                <div className={filesContainerClassName}>
+                  {files.map((item, i) => (<p key={i}>{item}</p>))}                 
+                </div>
+              </div>
+            )
+          }
         </div>
       </div>
     </div>

@@ -9,7 +9,6 @@ const Task = (
     text,
     date,
     complited,
-    files,
     isAddFiles,
     onDeleteTask,
     onDoneTask,

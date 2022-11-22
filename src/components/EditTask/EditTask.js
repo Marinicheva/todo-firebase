@@ -34,22 +34,28 @@ const EditTask = ({ id, title, text, date, onFinishEditTask, onSubmitEditTaskFor
   return (
     <li className='task__item'>
       <form className="add-task-form form" onSubmit={(evt) => handleSubmitEditTask(evt)}>
-        <input
-          className='form__field'
-          value={taskTitle}
-          id="name"
-          placeholder="Введите задачу..."
-          type="text"
-          onChange={(evt) => { handleChangeTitle(evt) }}
-        />
+        <label className='form__label'>
+          Заголовок задачи
+          <input
+            className='form__field'
+            value={taskTitle}
+            id="name"
+            placeholder="Заголовок задачи"
+            type="text"
+            onChange={(evt) => { handleChangeTitle(evt) }}
+          />
+        </label>
 
-        <textarea
-          className='form__field form__text'
-          value={taskText}
-          id="text"
-          placeholder="Введите задачу..."
-          onChange={(evt) => handleChangeText(evt)}
-        />
+        <label className='form__label'>
+          Описание задачи:
+          <textarea
+            className='form__field form__text'
+            value={taskText}
+            id="text"
+            placeholder="Введите задачу..."
+            onChange={(evt) => handleChangeText(evt)}
+          />
+        </label>
 
         <input
           className='form__field form__date'

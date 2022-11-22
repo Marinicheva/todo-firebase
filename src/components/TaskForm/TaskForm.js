@@ -88,7 +88,8 @@ const TaskForm = ({ onAddTask }) => {
         <input
           className='form__field form__file'
           id="file"
-          type="file" />
+          type="file" 
+        />
       </label>
 
       <button

@@ -13,6 +13,7 @@ const FullTaskPopup = ({
 }) => {
   const popupClassNames = `popup ${isOpen ? 'popup_opened' : ''}`;
   const [isShowFiles, setIsShowFiles] = useState(false);
+  const [filesLinks, setFilesLinks] = useState({});
   
   const filesContainerClassName =isShowFiles ? "popup__files-container_show" : "popup__files-container";
 
@@ -26,10 +27,9 @@ const FullTaskPopup = ({
   }
 
   const handleShowFiles = () => {
-    console.log('click');
-    onShowFiles(files, id);
+    const filesObj = onShowFiles(files, id);
+    setFilesLinks(filesObj);
     setIsShowFiles(state => !state);
-
   }
 
   return (
@@ -66,7 +66,9 @@ const FullTaskPopup = ({
                   Файлы к текущей задаче
                 </button>
                 <div className={filesContainerClassName}>
-                  {files.map((item, i) => (<p key={i}>{item}</p>))}                 
+                  {
+                    console.log(filesLinks)
+                  }               
                 </div>
               </div>
             )

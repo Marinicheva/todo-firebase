@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { db, storage } from '../../utils/firebase';
 import { ref as dbRef, push, get, remove, update } from "firebase/database";
-import { ref as storageRef, uploadBytes, listAll } from "firebase/storage";
+import { ref as storageRef, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
 
 import TaskForm from '../TaskForm/TaskForm';
 import Task from '../Task/Task';
@@ -56,9 +56,15 @@ function App() {
     return files;
 }
 
-const getFile = (id, fileName) => {
-  console.log(id + ' ' + fileName);
-
+const getFileLink = (id, fileName) => {
+  const fileRef = storageRef(storage, `task/${id}/${fileName}`);
+  
+  // TODO: Придумать как достать ссылку
+  // Вариант - передать третим аргументом функцию, которая будет создавать новый элемент...
+  getDownloadURL(fileRef)
+    .then((url) => {
+      console.log(url);
+    });
 }
 
 // Функция загрузки файлов в Firebase Storage
@@ -137,9 +143,14 @@ const onOpenTaskPopup = (id) => {
 
 // Функция подгрузки в попап файлов, относящихчя к задаче
 const onShowFiles = (files, id) => {
+  const fileLinks = {};
+
   files.forEach(file => {
-    getFile(id, file);
+    const link = getFileLink(id, file);
+    fileLinks[file] = link;
   });
+
+  return fileLinks;
 }
 
 // Функция закрытия попапа с просмотром задачи

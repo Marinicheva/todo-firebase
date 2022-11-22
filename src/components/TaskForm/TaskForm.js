@@ -1,13 +1,16 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 const TaskForm = ({ onAddTask }) => {
   const now = new Date();
   const date = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
-  const defaultState = { title: '', text: '', date: date };
+  const defaultState = { title: '', text: '', date: date, files: null };
 
   const [taskTitle, setTaskTitle] = useState(defaultState.title);
   const [taskText, setTaskText] = useState(defaultState.text);
   const [taskDate, setTaskDate] = useState(defaultState.date);
+  const [taskFiles, setTaskFiles] = useState(defaultState.files);
+  const fileInput = useRef();
+
 
   const handleChangeTaskTitle = (evt) => {
     setTaskTitle(evt.target.value);
@@ -21,14 +24,26 @@ const TaskForm = ({ onAddTask }) => {
     setTaskDate(evt.target.value);
   }
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-
-    const newTask = { title: taskTitle, text: taskText, date: taskDate };
-    onAddTask(newTask);
+  const handleResetForm = () => {
     setTaskTitle(defaultState.title);
     setTaskText(defaultState.text);
     setTaskDate(defaultState.date);
+    setTaskFiles(defaultState.files);
+  }
+
+  // TODO: Отображаем файлы в процессе добавления
+  const handleAddFiles = (evt) => {
+    setTaskFiles(Array.from(evt.target.files));
+  }
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+
+    console.log(fileInput.current.files);
+  
+    const newTask = { title: taskTitle, text: taskText, date: taskDate };
+    onAddTask(newTask);
+    handleResetForm();
   }
 
   return (
@@ -86,17 +101,33 @@ const TaskForm = ({ onAddTask }) => {
 
         </svg>
         <input
+          ref={fileInput}
           className='form__field form__file'
           id="file"
-          type="file" 
+          type="file"
+          onChange={(evt) => handleAddFiles(evt)}
+          multiple 
         />
       </label>
+      { 
+        // TODO: Чтобы видеть, что файлы добавлены
+        // Здесь отрендерить список прикрепленных файлов
+          taskFiles && 'Files add'
+        }
 
       <button
         className='form__btn'
         type="submit"
       >
         Добавить
+      </button>
+
+      <button
+        className='form__btn'
+        onClick={handleResetForm}
+        type="button"
+      >
+        Сбросить форму
       </button>
     </form>
   )

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import db from '../../utils/firebase';
 import { ref, push, get, remove, update } from "firebase/database";
 
@@ -10,11 +10,9 @@ function App() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [openedTask, setIsOpenedTask] = useState(null);
   // TODO: Изменить названия этих стейтов ниже
-  const [forRender, setForRender] = useState([]);
+  const [tasks, setTasks] = useState([]);
 
-  // Рендер задач из БД
-  useEffect(() => {
-    // TODO: Ниже повторяющийся код. Применить принцип DRY
+  const getTasks = useCallback(() => {
     const arr = [];
 
     get(ref(db, 'tasks'))
@@ -26,9 +24,12 @@ function App() {
           arr.push({ id: key, ...data });
         });
 
-        setForRender(arr.reverse());
+        setTasks(arr.reverse());
       });
   }, []);
+
+  // Рендер задач из БД
+  useEffect(() => getTasks(), [getTasks]);
 
   // Добавляем запись в БД
   const onAddTask = (data) => {
@@ -38,20 +39,7 @@ function App() {
     push(ref(db, 'tasks'), { complited: false, ...data })
       .then(() => {
         // Мб всплывающее уведомление о добавлении
-        // TODO: Ниже повторяющийся код. Применить принцип DRY
-
-        get(ref(db, 'tasks'))
-          .then(snapshot => {
-            const arr = [];
-            snapshot.forEach(childSnapshot => {
-              const key = childSnapshot.key;
-              const data = childSnapshot.val();
-
-              arr.push({ id: key, ...data });
-            });
-
-            setForRender(arr.reverse());
-          });
+        getTasks();
         console.log('send')
       })
       .catch((err) => {
@@ -64,18 +52,7 @@ function App() {
   const onDeleteTask = (id) => {
     remove(ref(db, 'tasks/' + id))
       .then(() => {
-        get(ref(db, 'tasks'))
-          .then(snapshot => {
-            const arr = [];
-            snapshot.forEach(childSnapshot => {
-              const key = childSnapshot.key;
-              const data = childSnapshot.val();
-
-              arr.push({ id: key, ...data });
-            });
-
-            setForRender(arr.reverse());
-          });
+        getTasks();
         console.log('delete');
       });
   }
@@ -84,18 +61,7 @@ function App() {
   const onDoneTask = (id, data) => {
      update(ref(db, 'tasks/' + id), data)
       .then(() => {
-        get(ref(db, 'tasks'))
-          .then(snapshot => {
-            const arr = [];
-            snapshot.forEach(childSnapshot => {
-              const key = childSnapshot.key;
-              const data = childSnapshot.val();
-
-              arr.push({ id: key, ...data });
-            });
-
-            setForRender(arr.reverse());
-          });
+        getTasks();
         console.log('task is done');
       });
   }
@@ -104,24 +70,13 @@ function App() {
   const onUpdateTask = (id, data) => {
     update(ref(db, 'tasks/' + id), data)
       .then(() => {
-        get(ref(db, 'tasks'))
-          .then(snapshot => {
-            const arr = [];
-            snapshot.forEach(childSnapshot => {
-              const key = childSnapshot.key;
-              const data = childSnapshot.val();
-
-              arr.push({ id: key, ...data });
-            });
-
-            setForRender(arr.reverse());
-          });
+        getTasks();
         console.log('task is update');
       });
   }
 
   const onOpenTaskPopup = (id) => {
-    const openedTask = forRender.find(item => item.id === id);
+    const openedTask = tasks.find(item => item.id === id);
     setIsOpenedTask(openedTask)
     setIsPopupOpen(true);
   }
@@ -141,7 +96,7 @@ function App() {
       <div className="task__container">
         <ul className="task__list">
           {
-            forRender.map((item) => {
+            tasks.map((item) => {
               return (
                 <Task
                   key={item.id}

@@ -23,10 +23,12 @@ function App() {
 
           arr.push({ id: key, ...data });
         });
-
         setTasks(arr.reverse());
       });
   }, []);
+
+  // Рендер задач из БД
+  useEffect(() => getTasks(), [getTasks]);
 
   // TODO: Пробую получить файл из firebase
   // Files list
@@ -44,35 +46,30 @@ function App() {
     for (let file of data.files) {
       let fileRef = storageRef(storage, `/task/${task.key}/${file.name}`);
       uploadBytes(fileRef, file).then((snapshot) => {
-        console.log('Uploaded a blob or file!', snapshot);
+        console.log('Uploaded file!');
       });
 
     }
   }
 
-
-  // Рендер задач из БД
-  useEffect(() => getTasks(), [getTasks]);
-
   // Добавляем запись в БД
   const onAddTask = (data) => {
-    console.log(data);
-
-    if (!data || data.text === '') return Promise.reject('Nothing get');
+    if (!data) return Promise.reject('Nothing get');
 
     push(dbRef(db, 'tasks'), { complited: false, ...data })
       .then((task) => {
         // Мб всплывающее уведомление о добавлении
-        uploadFiles(data, task)
-        console.log(task.key);
-        console.log('send')
+        if (data.files) {
+          uploadFiles(data, task);
+        }
+        console.log('Task is send');
       })
       .then(() => {
         getTasks();
       })
       .catch((err) => {
         // Уведомление о фейле
-        console.dir(err)
+        console.err(err)
       });
   }
 
@@ -81,25 +78,25 @@ function App() {
     remove(dbRef(db, 'tasks/' + id))
       .then(() => {
         getTasks();
-        console.log('delete');
+        console.log('Task is delete');
       });
   }
 
   // Отметить таску выполненной
   const onDoneTask = (id, data) => {
-     update(dbRef(dbRef, 'tasks/' + id), data)
+    update(dbRef(db, 'tasks/' + id), data)
       .then(() => {
         getTasks();
-        console.log('task is done');
+        console.log('Task is done');
       });
   }
 
   // Редактирование таски
   const onUpdateTask = (id, data) => {
-    update(dbRef(dbRef, 'tasks/' + id), data)
+    update(dbRef(db, 'tasks/' + id), data)
       .then(() => {
         getTasks();
-        console.log('task is update');
+        console.log('Task is update');
       });
   }
 
@@ -120,7 +117,7 @@ function App() {
       <div className='add-task'>
         <TaskForm onAddTask={onAddTask} onSubmitEditTaskForm={onUpdateTask} />
       </div>
-      
+
       <div className="task__container">
         <ul className="task__list">
           {

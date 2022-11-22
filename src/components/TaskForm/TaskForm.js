@@ -39,9 +39,17 @@ const TaskForm = ({ onAddTask }) => {
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
-    console.log(fileInput.current.files);
-  
-    const newTask = { title: taskTitle, text: taskText, date: taskDate, files: fileInput.current.files };
+    const newTask = {
+      title: taskTitle,
+      text: taskText,
+      date: taskDate,
+    };
+
+    if ( fileInput.current.files.length !== 0 ) {
+      newTask.files = fileInput.current.files;
+      newTask.isAddFiles = true;
+    }
+
     onAddTask(newTask);
     handleResetForm();
   }
@@ -56,6 +64,7 @@ const TaskForm = ({ onAddTask }) => {
           placeholder="Введите заголовок для задачи..."
           type="text"
           onChange={(evt) => handleChangeTaskTitle(evt)}
+          required
         />
       </label>
 
@@ -68,6 +77,7 @@ const TaskForm = ({ onAddTask }) => {
           id="text"
           placeholder="Введите задачу..."
           onChange={(evt) => handleChangeTaskText(evt)}
+          required
         />
       </label>
 
@@ -80,6 +90,7 @@ const TaskForm = ({ onAddTask }) => {
           type="date"
           id="date"
           onChange={(evt) => handleChangeTaskDate(evt)}
+          required
         />
       </label>
 
@@ -106,14 +117,25 @@ const TaskForm = ({ onAddTask }) => {
           id="file"
           type="file"
           onChange={(evt) => handleAddFiles(evt)}
-          multiple 
+          multiple
         />
       </label>
-      { 
-        // TODO: Чтобы видеть, что файлы добавлены
-        // Здесь отрендерить список прикрепленных файлов
-          taskFiles && 'Files add'
-        }
+
+      {
+        taskFiles && 
+        <div className='form__attach'>
+        <h3 className="form__attach-title">Файлы к задаче: </h3>
+        <ul className="form__attach-files">
+          {
+            taskFiles.map((item, i) => {
+              return (
+                <li key={i} className="form__attach-file">{item.name}</li>
+              )
+            })
+          }
+        </ul>
+        </div>
+      }
 
       <button
         className='form__btn'

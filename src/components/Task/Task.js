@@ -1,8 +1,21 @@
 import { useState } from 'react';
 
 import EditTask from '../EditTask/EditTask';
+import AttachIcon from '../../assets/imgs/attach-icon.png';
 
-const Task = ({ id, title, text, date, complited, onDeleteTask, onDoneTask, onUpdateTask, onOpenTask }) => {
+const Task = (
+  { id,
+    title,
+    text,
+    date,
+    complited,
+    files,
+    isAddFiles,
+    onDeleteTask,
+    onDoneTask,
+    onUpdateTask,
+    onOpenTask 
+  }) => {
 
   const [isTaskDone, setIsTaskDone] = useState(complited);
   const [isTaskEdit, setIsTaskEdit] = useState(false);
@@ -54,6 +67,7 @@ const Task = ({ id, title, text, date, complited, onDeleteTask, onDoneTask, onUp
   return (
     <li className={classNames}>
       <h2 className="task__title">{title}</h2>
+      {isAddFiles && <img className='task__attach-icon' src={AttachIcon} alt="У задачи есть приложенные файлы"/>}
       <p className="task__text">{text}</p>
       <div className="task__btns">
         <button className="task__btn task__btn-edit" onClick={onEditTask} disabled={isTaskDone}>

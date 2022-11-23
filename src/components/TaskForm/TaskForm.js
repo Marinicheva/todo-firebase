@@ -1,8 +1,11 @@
 import { useState, useRef } from 'react'
 
 const TaskForm = ({ onAddTask }) => {
+
+  // Дефолтные значения для полей создания задачи
   const now = new Date();
   const date = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+
   const defaultState = { title: '', text: '', date: date, files: null };
 
   const [taskTitle, setTaskTitle] = useState(defaultState.title);
@@ -12,6 +15,7 @@ const TaskForm = ({ onAddTask }) => {
   const fileInput = useRef();
 
 
+  // Функции для управляемых компонентов формы создания задачи
   const handleChangeTaskTitle = (evt) => {
     setTaskTitle(evt.target.value);
   }
@@ -24,6 +28,7 @@ const TaskForm = ({ onAddTask }) => {
     setTaskDate(evt.target.value);
   }
 
+  // Очистка формы
   const handleResetForm = () => {
     setTaskTitle(defaultState.title);
     setTaskText(defaultState.text);
@@ -31,11 +36,12 @@ const TaskForm = ({ onAddTask }) => {
     setTaskFiles(defaultState.files);
   }
 
-  // TODO: Отображаем файлы в процессе добавления
+  // Функция для отображения прикрепляемых к задаче файлов
   const handleAddFiles = (evt) => {
     setTaskFiles(Array.from(evt.target.files));
   }
 
+  // Функция сабмита формы создания задачи
   const handleSubmit = (evt) => {
     evt.preventDefault();
 

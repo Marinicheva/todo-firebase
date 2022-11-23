@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react'
 
-const EditTask = ({ id, title, text, date, onFinishEditTask, onSubmitEditTaskForm }) => {
+const EditTask = ({
+    id,
+    title,
+    text,
+    date,
+    onFinishEditTask,
+    onSubmitEditTaskForm
+  }) => {
+
   const [taskTitle, setTaskTitle] = useState('');
   const [taskText, setTaskText] = useState('');
   const [taskDate, setTaskDate] = useState('');
@@ -11,6 +19,7 @@ const EditTask = ({ id, title, text, date, onFinishEditTask, onSubmitEditTaskFor
     setTaskDate(date)
   }, [title, text, date]);
 
+  // Функции для управляемых компонентов
   const handleChangeTitle = (evt) => {
     setTaskTitle(evt.target.value);
   }
@@ -23,6 +32,7 @@ const EditTask = ({ id, title, text, date, onFinishEditTask, onSubmitEditTaskFor
     setTaskDate(evt.target.value);
   }
 
+  // Функция сабмита редактирования задачи
   const handleSubmitEditTask = (evt) => {
     evt.preventDefault();
     const data = { title: taskTitle, text: taskText, date: taskDate };

@@ -1,7 +1,6 @@
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 
 const FullTaskPopup = ({
-  id,
   title,
   text,
   date,
@@ -9,16 +8,15 @@ const FullTaskPopup = ({
   files,
   onClose,
   isOpen,
-  onShowFiles
 }) => {
-  const popupClassNames = `popup ${isOpen ? 'popup_opened' : ''}`;
-  const [isShowFiles, setIsShowFiles] = useState(false);
-  const [filesLinks, setFilesLinks] = useState({});
-  
-  const filesContainerClassName =isShowFiles ? "popup__files-container_show" : "popup__files-container";
 
+  const [isShowFiles, setIsShowFiles] = useState(false);
   const overlay = useRef();
 
+  const popupClassNames = `popup ${isOpen ? 'popup_opened' : ''}`;
+  const filesContainerClassName = isShowFiles ? "popup__files-container_show" : "popup__files-container";
+
+  // Функция закрытия попапа по оверлею
   const handleCloseClickByOverlay = (evt) => {
     console.log()
     if (evt.target === overlay.current) {
@@ -26,9 +24,9 @@ const FullTaskPopup = ({
     }
   }
 
+  // Просмотр списка прикрепленных файлов
   const handleShowFiles = () => {
-    const filesObj = onShowFiles(files, id);
-    setFilesLinks(filesObj);
+    console.log(files);
     setIsShowFiles(state => !state);
   }
 
@@ -66,9 +64,7 @@ const FullTaskPopup = ({
                   Файлы к текущей задаче
                 </button>
                 <div className={filesContainerClassName}>
-                  {
-                    console.log(filesLinks)
-                  }               
+                  { files.map((item, i) => (<p key={i} className="popup__attached-files">{item}</p>)) }
                 </div>
               </div>
             )

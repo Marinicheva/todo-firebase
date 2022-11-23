@@ -20,12 +20,15 @@ const Task = (
   const [isTaskEdit, setIsTaskEdit] = useState(false);
 
   let classNames = `task__item ${isTaskDone ? 'task__item_done' : ''}`;
+
+  // Проверяем дату на просроченность
   const nowDate = new Date();
 
   if (nowDate > new Date(date) && !isTaskDone) {
     classNames += 'task__item_expired'
   }
 
+  // Функция, отвечающая за отметку задачи выполненной
   const handleClickDone = () => {
     if (!isTaskDone) {
       setIsTaskDone(true);
@@ -33,23 +36,28 @@ const Task = (
     }
   }
 
+  // Функция удаления задачи
   const handleDeleteTask = () => {
     onDeleteTask(id);
   }
 
+  // Функция редактирования задачи
   const onEditTask = () => {
     setIsTaskEdit(true);
   }
 
+  // Функция, меняющая вид задачи с формы на обычный при завершении ее редактирования
   const onFinishEditTask = () => {
     setIsTaskEdit(false);
   }
 
+  // Функция, отвечающая за открытие задачи в режиме просмотра
   const handleOpenTask = () => {
     onOpenTask(id)
   }
 
 
+  // Условный рендер, если задача редактируемая то задача возвращается в виде формы 
   if (isTaskEdit) {
     return (
       <EditTask
